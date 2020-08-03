@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_trip/dao/home_dao.dart';
+import 'package:flutter_trip/model/home_model_info.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,6 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String resultString = "";
+
   double appBarAlpha = 0;
 
   final List _images = [
@@ -14,6 +20,36 @@ class _HomePageState extends State<HomePage> {
     "http://www.devio.org/img/avatar.png",
     "http://www.devio.org/img/avatar.png"
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+//  void loadData() {
+//    HomeDao.fetch().then((result) {
+//      setState(() {
+//        resultString = json.encode(result);
+//      });
+//    }).catchError((e) {
+//      setState(() {
+//        resultString = e.toString();
+//      });
+//    });
+//  }
+  void loadData() async {
+    try {
+      HomeModel homeModel = await HomeDao.fetch();
+      setState(() {
+        resultString = JsonCodec().encode(homeModel);
+      });
+    } catch (e) {
+      setState(() {
+        resultString = e.toString();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         height: 800,
                         child: ListTile(
-                          title: Text("哈哈哈"),
+                          title: Text(resultString),
                         ),
                       )
                     ],
