@@ -5,6 +5,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 const CATCH_URLS = ['m.ctrip.com/', 'm.ctrip.com/html5/', 'm.ctrip.com/html5'];
 
+// ignore: must_be_immutable
 class WebView extends StatefulWidget {
   String url;
   final String statusBarColor;
@@ -122,12 +123,17 @@ class _WebViewState extends State<WebView> {
       );
     }
     return Container(
+      color: backgroundColor,
+      padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
       child: FractionallySizedBox(
         //撑满整个屏幕的组件
         widthFactor: 1,
         child: Stack(
           children: <Widget>[
             GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Container(
                 margin: EdgeInsets.only(left: 10),
                 child: Icon(

@@ -11,8 +11,13 @@ class GridNavView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: _gridNavItems(context),
+    return PhysicalModel(
+      color: Colors.transparent, //设置圆角
+      borderRadius: BorderRadius.circular(6),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: _gridNavItems(context),
+      ),
     );
   }
 
@@ -62,6 +67,7 @@ class GridNavView extends StatelessWidget {
     return _wrapGesture(
         context,
         Stack(
+          alignment: Alignment.topCenter,
           children: <Widget>[
             Image.network(
               localNavList.icon,
@@ -70,9 +76,12 @@ class GridNavView extends StatelessWidget {
               width: 121,
               alignment: AlignmentDirectional.bottomEnd,
             ),
-            Text(
-              localNavList.title,
-              style: TextStyle(fontSize: 14, color: Colors.white),
+            Container(
+              margin: EdgeInsets.only(top: 11),
+              child: Text(
+                localNavList.title,
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
             )
           ],
         ),

@@ -6,6 +6,8 @@ import 'package:flutter_trip/dao/home_dao.dart';
 import 'package:flutter_trip/model/home_model_info.dart';
 import 'package:flutter_trip/widget/grid_nav.dart';
 import 'package:flutter_trip/widget/local_nav.dart';
+import 'package:flutter_trip/widget/sales_box.dart';
+import 'package:flutter_trip/widget/sub_nav.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,8 +17,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String resultString = "";
   double appBarAlpha = 0;
-  List<LocalNavList> LocalNavListInfo;
+  List<LocalNavList> localNavListInfo;
   GridNav gridNavModel;
+  SalesBox salesBox;
+  List<SubNavList> subNavList;
   List<BannerList> _images = [];
 
   @override
@@ -30,9 +34,11 @@ class _HomePageState extends State<HomePage> {
       HomeModel homeModel = await HomeDao.fetch();
       setState(() {
         resultString = JsonCodec().encode(homeModel);
-        LocalNavListInfo = homeModel.localNavList;
+        localNavListInfo = homeModel.localNavList;
         gridNavModel = homeModel.gridNav;
         _images = homeModel.bannerList;
+        subNavList = homeModel.subNavList;
+        salesBox = homeModel.salesBox;
       });
     } catch (e) {
       print(e);
@@ -72,8 +78,19 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                           padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
-                          child: LocalNav(localNavList: LocalNavListInfo)),
-                      GridNavView(gridNavModel: gridNavModel)
+                          child: LocalNav(localNavList: localNavListInfo)),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                        child: GridNavView(gridNavModel: gridNavModel),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                        child: SubNav(subNavList: subNavList),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                        child: SalesBoxView(salesBox: salesBox),
+                      )
                     ],
                   ))),
           Opacity(
