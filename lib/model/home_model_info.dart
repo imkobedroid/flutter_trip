@@ -162,10 +162,10 @@ class Hotel {
   String startColor;
   String endColor;
   LocalNavList mainItem;
-  Item3 item1;
+  Item1 item1;
   Item1 item2;
-  Item3 item3;
-  Item3 item4;
+  Item1 item3;
+  Item1 item4;
 
   Hotel(
       {this.startColor,
@@ -182,10 +182,10 @@ class Hotel {
     mainItem = json['mainItem'] != null
         ? new LocalNavList.fromJson(json['mainItem'])
         : null;
-    item1 = json['item1'] != null ? new Item3.fromJson(json['item1']) : null;
+    item1 = json['item1'] != null ? new Item1.fromJson(json['item1']) : null;
     item2 = json['item2'] != null ? new Item1.fromJson(json['item2']) : null;
-    item3 = json['item3'] != null ? new Item3.fromJson(json['item3']) : null;
-    item4 = json['item4'] != null ? new Item3.fromJson(json['item4']) : null;
+    item3 = json['item3'] != null ? new Item1.fromJson(json['item3']) : null;
+    item4 = json['item4'] != null ? new Item1.fromJson(json['item4']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -255,41 +255,24 @@ class Item2 {
   }
 }
 
-class Item3 {
-  String title;
-  String url;
-  bool hideAppBar;
 
-  Item3({this.title, this.url, this.hideAppBar});
-
-  Item3.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    url = json['url'];
-    hideAppBar = json['hideAppBar'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['url'] = this.url;
-    data['hideAppBar'] = this.hideAppBar;
-    return data;
-  }
-}
 
 class Item1 {
+  String icon;
   String title;
   String url;
   String statusBarColor;
   bool hideAppBar;
 
-  Item1({this.title, this.url, this.statusBarColor, this.hideAppBar});
+  Item1(
+      {this.title, this.url, this.statusBarColor, this.hideAppBar, this.icon});
 
   Item1.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     url = json['url'];
     statusBarColor = json['statusBarColor'];
     hideAppBar = json['hideAppBar'];
+    icon = json['icon'];
   }
 
   Map<String, dynamic> toJson() {
@@ -298,6 +281,7 @@ class Item1 {
     data['url'] = this.url;
     data['statusBarColor'] = this.statusBarColor;
     data['hideAppBar'] = this.hideAppBar;
+    data['icon'] = this.icon;
     return data;
   }
 }

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
+const CATCH_URLS = ['m.ctrip.com/', 'm.ctrip.com/html5/', 'm.ctrip.com/html5'];
+
 class WebView extends StatefulWidget {
   String url;
   final String statusBarColor;
@@ -15,13 +17,14 @@ class WebView extends StatefulWidget {
       this.statusBarColor,
       this.title,
       this.hideAppBar,
-      this.backForbid});
+      this.backForbid = false});
 
   @override
   _WebViewState createState() => _WebViewState();
 }
 
 class _WebViewState extends State<WebView> {
+  bool exit = false;
   final webViewReference = FlutterWebviewPlugin();
   StreamSubscription<String> _streamSubscription;
   StreamSubscription<WebViewStateChanged> _onStateChanged;
@@ -35,18 +38,37 @@ class _WebViewState extends State<WebView> {
 
     _onStateChanged =
         webViewReference.onStateChanged.listen((WebViewStateChanged changed) {
-      switch (changed.type) {
-        case WebViewState.startLoad:
-          break;
+          switch (changed.type) {
+            case WebViewState.startLoad:
+              if (_isToMain(changed.url) && !exit) {
+                if (widget.backForbid) {
+                  webViewReference.launch(widget.url);
+                } else {
+                  Navigator.pop(context);
+                  exit = true;
+                }
+              }
+              break;
 
-        default:
-          break;
-      }
-    });
+            default:
+              break;
+          }
+        });
 
     //加载出错的监听
     _onHttpError =
         webViewReference.onHttpError.listen((WebViewHttpError error) {});
+  }
+
+  _isToMain(String url) {
+    bool contain = false;
+    for (final value in CATCH_URLS) {
+      if (url?.endsWith(value) ?? false) {
+        contain = true;
+        break;
+      }
+    }
+    return contain;
   }
 
   @override

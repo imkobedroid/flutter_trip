@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_trip/dao/home_dao.dart';
 import 'package:flutter_trip/model/home_model_info.dart';
+import 'package:flutter_trip/widget/grid_nav.dart';
 import 'package:flutter_trip/widget/local_nav.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,12 +16,8 @@ class _HomePageState extends State<HomePage> {
   String resultString = "";
   double appBarAlpha = 0;
   List<LocalNavList> LocalNavListInfo;
-
-  final List _images = [
-    "http://www.devio.org/img/avatar.png",
-    "http://www.devio.org/img/avatar.png",
-    "http://www.devio.org/img/avatar.png"
-  ];
+  GridNav gridNavModel;
+  List<BannerList> _images = [];
 
   @override
   void initState() {
@@ -28,23 +25,14 @@ class _HomePageState extends State<HomePage> {
     loadData();
   }
 
-//  void loadData() {
-//    HomeDao.fetch().then((result) {
-//      setState(() {
-//        resultString = json.encode(result);
-//      });
-//    }).catchError((e) {
-//      setState(() {
-//        resultString = e.toString();
-//      });
-//    });
-//  }
   void loadData() async {
     try {
       HomeModel homeModel = await HomeDao.fetch();
       setState(() {
         resultString = JsonCodec().encode(homeModel);
         LocalNavListInfo = homeModel.localNavList;
+        gridNavModel = homeModel.gridNav;
+        _images = homeModel.bannerList;
       });
     } catch (e) {
       print(e);
@@ -76,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                           itemCount: _images.length,
                           autoplay: true,
                           itemBuilder: (BuildContext context, int index) {
-                            return Image.network(_images[index],
+                            return Image.network(_images[index].icon,
                                 fit: BoxFit.fill);
                           },
                           pagination: SwiperPagination(), //指示器
@@ -85,12 +73,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                           padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
                           child: LocalNav(localNavList: LocalNavListInfo)),
-                      Container(
-                        height: 800,
-                        child: ListTile(
-                          title: Text(resultString),
-                        ),
-                      )
+                      GridNavView(gridNavModel: gridNavModel)
                     ],
                   ))),
           Opacity(
