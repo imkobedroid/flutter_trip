@@ -5,9 +5,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_trip/dao/home_dao.dart';
 import 'package:flutter_trip/model/home_model_info.dart';
 import 'package:flutter_trip/widget/grid_nav.dart';
+import 'package:flutter_trip/widget/loading_container.dart';
 import 'package:flutter_trip/widget/local_nav.dart';
 import 'package:flutter_trip/widget/sales_box.dart';
 import 'package:flutter_trip/widget/sub_nav.dart';
+import 'package:flutter_trip/widget/webview.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,14 +24,15 @@ class _HomePageState extends State<HomePage> {
   SalesBox salesBox;
   List<SubNavList> subNavList;
   List<BannerList> _images = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    _handleRefresh();
   }
 
-  void loadData() async {
+  Future<Null> _handleRefresh() async {
     try {
       HomeModel homeModel = await HomeDao.fetch();
       setState(() {
@@ -39,74 +42,42 @@ class _HomePageState extends State<HomePage> {
         _images = homeModel.bannerList;
         subNavList = homeModel.subNavList;
         salesBox = homeModel.salesBox;
+        _isLoading = false;
       });
     } catch (e) {
       print(e);
+      setState(() {
+        _isLoading = false;
+      });
     }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xfff2f2f2),
-      body: Stack(
-        children: <Widget>[
-          MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: NotificationListener(
-                  onNotification: (notification) {
-                    if (notification is ScrollUpdateNotification &&
-                        notification.depth == 0) {
-                      _onScroll(notification.metrics.pixels);
-                    }
-                    return true;
-                  },
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                        height: 160,
-                        child: Swiper(
-                          itemCount: _images.length,
-                          autoplay: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Image.network(_images[index].icon,
-                                fit: BoxFit.fill);
-                          },
-                          pagination: SwiperPagination(), //指示器
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
-                          child: LocalNav(localNavList: localNavListInfo)),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
-                        child: GridNavView(gridNavModel: gridNavModel),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
-                        child: SubNav(subNavList: subNavList),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
-                        child: SalesBoxView(salesBox: salesBox),
-                      )
-                    ],
-                  ))),
-          Opacity(
-            child: Container(
-              height: 80,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text("首页"),
-                ),
-              ),
-            ),
-            opacity: appBarAlpha,
-          )
-        ],
+      body: LoadingContainer(
+        isLoading: _isLoading,
+        child: Stack(
+          children: <Widget>[
+            MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: RefreshIndicator(
+                    child: NotificationListener(
+                        onNotification: (notification) {
+                          if (notification is ScrollUpdateNotification &&
+                              notification.depth == 0) {
+                            _onScroll(notification.metrics.pixels);
+                          }
+                          return true;
+                        },
+                        child: _listView()),
+                    onRefresh: _handleRefresh)),
+            _appBar
+          ],
+        ),
       ),
     );
   }
@@ -122,4 +93,69 @@ class _HomePageState extends State<HomePage> {
       appBarAlpha = alpha;
     });
   }
+
+  Widget _listView() {
+    return ListView(
+      children: <Widget>[
+        _banner,
+        Padding(
+            padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+            child: LocalNav(localNavList: localNavListInfo)),
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child: GridNavView(gridNavModel: gridNavModel),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child: SubNav(subNavList: subNavList),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child: SalesBoxView(salesBox: salesBox),
+        )
+      ],
+    );
+  }
+
+  Widget get _appBar {
+    return Opacity(
+      child: Container(
+        height: 80,
+        decoration: BoxDecoration(color: Colors.white),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text("首页"),
+          ),
+        ),
+      ),
+      opacity: appBarAlpha,
+    );
+  }
+
+  get _banner => Container(
+        height: 160,
+        child: Swiper(
+          itemCount: _images.length,
+          autoplay: true,
+          itemBuilder: (BuildContext context, int index) {
+            BannerList banner = _images[index];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WebView(
+                              url: banner.url,
+                              statusBarColor: banner.statusBarColor,
+                              hideAppBar: banner.hideAppBar,
+                            )));
+              },
+              child: Image.network(banner.icon, fit: BoxFit.fill),
+            );
+          },
+          pagination: SwiperPagination(), //指示器
+        ),
+      );
 }

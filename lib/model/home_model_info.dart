@@ -85,18 +85,24 @@ class Config {
 class BannerList {
   String icon;
   String url;
+  String statusBarColor;
+  bool hideAppBar;
 
-  BannerList({this.icon, this.url});
+  BannerList({this.icon, this.url, this.statusBarColor, this.hideAppBar});
 
   BannerList.fromJson(Map<String, dynamic> json) {
     icon = json['icon'];
     url = json['url'];
+    statusBarColor = json['statusBarColor'];
+    hideAppBar = json['hideAppBar'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['icon'] = this.icon;
     data['url'] = this.url;
+    data['statusBarColor'] = this.statusBarColor;
+    data['hideAppBar'] = this.hideAppBar;
     return data;
   }
 }
