@@ -16,7 +16,7 @@ class _SearchPageState extends State<SearchPage> {
           SearchBar(
             hideLeft: true,
             defaultText: "kobe",
-            hint: "bryant",
+            hint: "请输入要搜索的的内容",
             leftButtonClick: () {
               Navigator.pop(context);
             },

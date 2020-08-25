@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 enum SearchBarType { home, normal, homeLight }
 
@@ -103,40 +104,50 @@ class _SearchBarState extends State<SearchBar> {
     } else {
       inputBoxColor = Color(int.parse("0xffEDEDED"));
     }
-    return Row(children: <Widget>[
-      Icon(
-        Icons.search,
-        size: 20,
-        color: widget.searchBarType == SearchBarType.normal
-            ? Color(0xffA9A9A9)
-            : Colors.blue,
-      ),
-      Expanded(
-          flex: 1,
-          child: widget.searchBarType == SearchBarType.normal
-              ? TextField(
-                  controller: _textEditingController,
-                  onChanged: _onChange,
-                  autofocus: true,
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300),
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      border: InputBorder.none,
-                      hintText: widget?.hint ?? '',
-                      hintStyle: TextStyle(fontSize: 15)),
-                )
-              : _wrapTap(
-                  Container(
-                    child: Text(
-                      widget.defaultText,
-                      style: TextStyle(fontSize: 13, color: Colors.grey),
+    return Container(
+      height: 30,
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+          color: inputBoxColor,
+          borderRadius: BorderRadius.circular(
+              widget.searchBarType == SearchBarType.normal ? 5 : 15)),
+      child: Row(children: <Widget>[
+        Icon(
+          Icons.search,
+          size: 20,
+          color: widget.searchBarType == SearchBarType.normal
+              ? Color(0xffA9A9A9)
+              : Colors.blue,
+        ),
+        Expanded(
+            flex: 1,
+            child: widget.searchBarType == SearchBarType.normal
+                ? TextField(
+                    controller: _textEditingController,
+                    onChanged: _onChange,
+                    autofocus: true,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        textBaseline: TextBaseline.alphabetic,
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(5, 0, 5, 12),
+                        border: InputBorder.none,
+                        hintText: widget?.hint ?? '',
+                        hintStyle: TextStyle(fontSize: 15)),
+                  )
+                : _wrapTap(
+                    Container(
+                      child: Text(
+                        widget.defaultText,
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
                     ),
-                  ),
-                  widget.inputBoxClick))
-    ]);
+                    widget.inputBoxClick))
+      ]),
+    );
   }
 
   _onChange(String text) {
