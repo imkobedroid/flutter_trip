@@ -56,7 +56,43 @@ class _SearchBarState extends State<SearchBar> {
         : _getHomeSearch();
   }
 
-  _getHomeSearch() {}
+  _getHomeSearch() {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          _wrapTap(
+              Container(
+                padding: EdgeInsets.fromLTRB(6, 5, 5, 5),
+                child: Row(
+                  children: [
+                    Text(
+                      "上海",
+                      style: TextStyle(color: _homeFontColor(), fontSize: 14),
+                    ),
+                    Icon(
+                      Icons.expand_more,
+                      color: _homeFontColor(),
+                      size: 22,
+                    )
+                  ],
+                ),
+              ),
+              widget?.leftButtonClick),
+          Expanded(flex: 1, child: _inputBox()),
+          _wrapTap(
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: Icon(
+                  Icons.comment,
+                  color: _homeFontColor(),
+                  size: 26,
+                ),
+              ),
+              widget?.rightButtonClick)
+        ],
+      ),
+    );
+  }
 
   _getNormalSearch() {
     return Container(
@@ -64,6 +100,7 @@ class _SearchBarState extends State<SearchBar> {
         children: <Widget>[
           _wrapTap(
               Container(
+                padding: EdgeInsets.fromLTRB(6, 5, 10, 5),
                 child: widget?.hideLeft ?? false
                     ? null
                     : Icon(
@@ -137,15 +174,34 @@ class _SearchBarState extends State<SearchBar> {
                         border: InputBorder.none,
                         hintText: widget?.hint ?? '',
                         hintStyle: TextStyle(fontSize: 15)),
-                  )
+            )
                 : _wrapTap(
-                    Container(
-                      child: Text(
-                        widget.defaultText,
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
-                      ),
-                    ),
-                    widget.inputBoxClick))
+                Container(
+                  child: Text(
+                    widget.defaultText,
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                ),
+                widget.inputBoxClick)),
+        !showClear
+            ? _wrapTap(
+            Icon(Icons.mic,
+                size: 22,
+                color: widget.searchBarType == SearchBarType.normal
+                    ? Colors.blue
+                    : Colors.grey),
+            widget.speakClick)
+            : _wrapTap(
+            Icon(
+              Icons.clear,
+              color: Colors.grey,
+              size: 22,
+            ), () {
+          setState(() {
+            _textEditingController.clear();
+          });
+          _onChange('');
+        })
       ]),
     );
   }
@@ -163,5 +219,11 @@ class _SearchBarState extends State<SearchBar> {
     if (widget.onChanged == null) {
       widget.onChanged(text);
     }
+  }
+
+  _homeFontColor() {
+    return widget.searchBarType == SearchBarType.homeLight
+        ? Colors.black54
+        : Colors.white;
   }
 }

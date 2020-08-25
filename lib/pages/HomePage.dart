@@ -8,6 +8,7 @@ import 'package:flutter_trip/widget/grid_nav.dart';
 import 'package:flutter_trip/widget/loading_container.dart';
 import 'package:flutter_trip/widget/local_nav.dart';
 import 'package:flutter_trip/widget/sales_box.dart';
+import 'package:flutter_trip/widget/search_bar.dart';
 import 'package:flutter_trip/widget/sub_nav.dart';
 import 'package:flutter_trip/widget/webview.dart';
 
@@ -118,18 +119,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget get _appBar {
-    return Opacity(
-      child: Container(
-        height: 80,
-        decoration: BoxDecoration(color: Colors.white),
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Text("首页"),
+    return Column(
+      children: [
+        Container(
+          height: 80,
+          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          decoration: BoxDecoration(
+              color:
+                  Color.fromARGB((appBarAlpha * 255).toInt(), 255, 255, 255)),
+          child: SearchBar(
+            searchBarType: appBarAlpha > 0.2
+                ? SearchBarType.homeLight
+                : SearchBarType.home,
+            inputBoxClick: _jumpToSearch(),
+            speakClick: _jumpToSpeak(),
+            defaultText: "网红 打卡地 酒店 美食",
+            leftButtonClick: () {},
           ),
         ),
-      ),
-      opacity: appBarAlpha,
+        Container(
+          height: appBarAlpha > 0.2 ? 0.5 : 0,
+          decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)]),
+        )
+      ],
     );
   }
 
@@ -148,14 +161,18 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(
                         builder: (context) => WebView(
                               url: banner.url,
-                              statusBarColor: banner.statusBarColor,
-                              hideAppBar: banner.hideAppBar,
-                            )));
+                          statusBarColor: banner.statusBarColor,
+                          hideAppBar: banner.hideAppBar,
+                        )));
               },
               child: Image.network(banner.icon, fit: BoxFit.fill),
             );
           },
           pagination: SwiperPagination(), //指示器
         ),
-      );
+  );
+
+  _jumpToSearch() {}
+
+  _jumpToSpeak() {}
 }
