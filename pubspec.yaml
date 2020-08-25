@@ -21,8 +21,9 @@ dependencies:
     sdk: flutter
   flutter_swiper: ^1.1.6
   http: ^0.12.2
-  shared_preferences: ^0.5.10
   flutter_webview_plugin: ^0.3.11
+  shared_preferences: ^0.5.10
+
 
 
 
