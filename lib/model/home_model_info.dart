@@ -6,17 +6,16 @@ class HomeModel {
   List<SubNavList> subNavList;
   SalesBox salesBox;
 
-  HomeModel(
-      {this.config,
-      this.bannerList,
-      this.localNavList,
-      this.gridNav,
-      this.subNavList,
-      this.salesBox});
+  HomeModel({this.config,
+    this.bannerList,
+    this.localNavList,
+    this.gridNav,
+    this.subNavList,
+    this.salesBox});
 
   HomeModel.fromJson(Map<String, dynamic> json) {
     config =
-        json['config'] != null ? new Config.fromJson(json['config']) : null;
+    json['config'] != null ? new Config.fromJson(json['config']) : null;
     if (json['bannerList'] != null) {
       bannerList = new List<BannerList>();
       json['bannerList'].forEach((v) {
@@ -30,7 +29,7 @@ class HomeModel {
       });
     }
     gridNav =
-        json['gridNav'] != null ? new GridNav.fromJson(json['gridNav']) : null;
+    json['gridNav'] != null ? new GridNav.fromJson(json['gridNav']) : null;
     if (json['subNavList'] != null) {
       subNavList = new List<SubNavList>();
       json['subNavList'].forEach((v) {
@@ -114,8 +113,7 @@ class LocalNavList {
   String statusBarColor;
   bool hideAppBar;
 
-  LocalNavList(
-      {this.icon, this.title, this.url, this.statusBarColor, this.hideAppBar});
+  LocalNavList({this.icon, this.title, this.url, this.statusBarColor, this.hideAppBar});
 
   LocalNavList.fromJson(Map<String, dynamic> json) {
     icon = json['icon'];
@@ -173,14 +171,13 @@ class Hotel {
   Item1 item3;
   Item1 item4;
 
-  Hotel(
-      {this.startColor,
-      this.endColor,
-      this.mainItem,
-      this.item1,
-      this.item2,
-      this.item3,
-      this.item4});
+  Hotel({this.startColor,
+    this.endColor,
+    this.mainItem,
+    this.item1,
+    this.item2,
+    this.item3,
+    this.item4});
 
   Hotel.fromJson(Map<String, dynamic> json) {
     startColor = json['startColor'];
@@ -262,7 +259,6 @@ class Item2 {
 }
 
 
-
 class Item1 {
   String icon;
   String title;
@@ -270,8 +266,7 @@ class Item1 {
   String statusBarColor;
   bool hideAppBar;
 
-  Item1(
-      {this.title, this.url, this.statusBarColor, this.hideAppBar, this.icon});
+  Item1({this.title, this.url, this.statusBarColor, this.hideAppBar, this.icon});
 
   Item1.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -327,15 +322,14 @@ class SalesBox {
   MainItem smallCard3;
   MainItem smallCard4;
 
-  SalesBox(
-      {this.icon,
-      this.moreUrl,
-      this.bigCard1,
-      this.bigCard2,
-      this.smallCard1,
-      this.smallCard2,
-      this.smallCard3,
-      this.smallCard4});
+  SalesBox({this.icon,
+    this.moreUrl,
+    this.bigCard1,
+    this.bigCard2,
+    this.smallCard1,
+    this.smallCard2,
+    this.smallCard3,
+    this.smallCard4});
 
   SalesBox.fromJson(Map<String, dynamic> json) {
     icon = json['icon'];

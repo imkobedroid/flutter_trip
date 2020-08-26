@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 enum SearchBarType { home, normal, homeLight }
 
 class SearchBar extends StatefulWidget {
+
   final bool enabled;
   final bool hideLeft;
   final SearchBarType searchBarType;
@@ -105,8 +106,8 @@ class _SearchBarState extends State<SearchBar> {
                     ? null
                     : Icon(
                         Icons.arrow_back_ios,
-                        color: Colors.grey,
-                        size: 26,
+                  color: Colors.grey,
+                  size: 20,
                       ),
               ),
               widget?.leftButtonClick),
@@ -116,7 +117,7 @@ class _SearchBarState extends State<SearchBar> {
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                 child: Text(
                   "搜索",
-                  style: TextStyle(color: Colors.blue, fontSize: 17),
+                  style: TextStyle(color: Colors.blue, fontSize: 15),
                 ),
               ),
               widget?.rightButtonClick)
@@ -169,11 +170,11 @@ class _SearchBarState extends State<SearchBar> {
                         fontSize: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.w300),
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(5, 0, 5, 12),
-                        border: InputBorder.none,
-                        hintText: widget?.hint ?? '',
-                        hintStyle: TextStyle(fontSize: 15)),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(5, 0, 5, 15),
+                  border: InputBorder.none,
+                  hintText: widget?.hint ?? '',
+                  hintStyle: TextStyle(fontSize: 15)),
             )
                 : _wrapTap(
                 Container(
@@ -216,7 +217,7 @@ class _SearchBarState extends State<SearchBar> {
         showClear = false;
       });
     }
-    if (widget.onChanged == null) {
+    if (widget.onChanged != null) {
       widget.onChanged(text);
     }
   }
