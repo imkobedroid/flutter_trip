@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_trip/dao/home_dao.dart';
 import 'package:flutter_trip/model/home_model_info.dart';
+import 'package:flutter_trip/pages/SearchPage.dart';
 import 'package:flutter_trip/widget/grid_nav.dart';
 import 'package:flutter_trip/widget/loading_container.dart';
 import 'package:flutter_trip/widget/local_nav.dart';
@@ -131,8 +132,8 @@ class _HomePageState extends State<HomePage> {
             searchBarType: appBarAlpha > 0.2
                 ? SearchBarType.homeLight
                 : SearchBarType.home,
-            inputBoxClick: _jumpToSearch(),
-            speakClick: _jumpToSpeak(),
+            inputBoxClick: _jumpToSearch,
+            speakClick: _jumpToSpeak,
             defaultText: "网红 打卡地 酒店 美食",
             leftButtonClick: () {},
           ),
@@ -161,18 +162,25 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(
                         builder: (context) => WebView(
                               url: banner.url,
-                          statusBarColor: banner.statusBarColor,
-                          hideAppBar: banner.hideAppBar,
-                        )));
+                              statusBarColor: banner.statusBarColor,
+                              hideAppBar: banner.hideAppBar,
+                            )));
               },
               child: Image.network(banner.icon, fit: BoxFit.fill),
             );
           },
           pagination: SwiperPagination(), //指示器
         ),
-  );
+      );
 
-  _jumpToSearch() {}
+  _jumpToSearch() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SearchPage(
+                  hint: "网红 打卡地 酒店 美食",
+                )));
+  }
 
   _jumpToSpeak() {}
 }
